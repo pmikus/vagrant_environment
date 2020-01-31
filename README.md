@@ -1,2 +1,2 @@
-# vagrant_environment
-Vagrant orchestrated and provisioned environment
+# Vagrant environment
+Vagrant environment provisioning (including Hashicorp Packer image building)

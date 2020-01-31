@@ -1,0 +1,4 @@
+---
+# file: vagrant.yml
+
+hostname: 'sirius'

@@ -51,7 +51,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # Create a forwarded port mapping which allows access to a specific port
     # within the machine from a port on the host machine. In the example below,
     # accessing "localhost:8080" will access port 80 on the guest machine.
-    config.vm.network :forwarded_port, guest: 22, host: 2201
+    #config.vm.network :forwarded_port, guest: 22, host: 2201
 
     # Configure testing network interfaces.
     config.vm.network :private_network, auto_config: false, virtualbox__intnet: "link1", nic_type: "82545EM", mac: "080027000001"
@@ -63,6 +63,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # Puppet, Chef, Shell, Salt, and Docker are also available. Please see the
     # documentation for more information about their specific syntax and use.
     config.vm.provision "ansible_local" do |ansible|
+        ansible.install = false
         ansible.version = "latest"
         ansible.compatibility_mode = "2.0"
         ansible.become = true
@@ -99,12 +100,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         end
     end
 
-    config.vm.define "ubuntu_eoan_desktop" do |flavor|
+    config.vm.define "ubuntu_disco_desktop", autostart: false do |flavor|
         # Base box definition, currently using.
         #  Packer Ubuntu 19.10 VirtualBox image.
         flavor.vm.box = "#{vagrant_box_path}/virtualbox/ubuntu-eoan-desktop-amd64-0.1.box"
         #flavor.vm.box_version = "0.1"
-        flavor.vm.box_check_update = true
+        flavor.vm.box_check_update = false
 
         # Virtualbox machine configuration.
         flavor.vm.provider "virtualbox" do |vb|
@@ -126,9 +127,35 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         end
     end
 
+    config.vm.define "ubuntu_focal_desktop" do |flavor|
+        # Base box definition, currently using.
+        #  Packer Ubuntu 20.04 VirtualBox image.
+        flavor.vm.box = "#{vagrant_box_path}/virtualbox/ubuntu-focal-desktop-amd64-0.1.box"
+        #flavor.vm.box_version = "0.1"
+        flavor.vm.box_check_update = false
+
+        # Virtualbox machine configuration.
+        flavor.vm.provider "virtualbox" do |vb|
+            vb.name = "vagrant_ubuntu_focal_desktop"
+            vb.gui = true
+            vb.customize ["modifyvm", :id, "--nicpromisc2", "allow-all"]
+            vb.customize ["modifyvm", :id, "--nicpromisc3", "allow-all"]
+            vb.customize ["modifyvm", :id, "--nicpromisc4", "allow-all"]
+            vb.customize ["modifyvm", :id, "--nicpromisc5", "allow-all"]
+            vb.customize ["modifyvm", :id, "--ostype", "Linux_64"]
+            vb.customize ["modifyvm", :id, "--memory", 8196]
+            vb.customize ["modifyvm", :id, "--cpus", 4]
+            vb.customize ["modifyvm", :id, "--vram", 256]
+            vb.customize ["modifyvm", :id, "--ioapic", "on"]
+            vb.customize ["modifyvm", :id, "--rtcuseutc", "on"]
+            vb.customize ["modifyvm", :id, "--clipboard", "bidirectional"]
+            vb.customize ["modifyvm", :id, "--draganddrop", "bidirectional"]
+            vb.customize ["modifyvm", :id, "--usb", "on"]
+        end
+    end
+
     config.vm.define "fedora_31", autostart: false do |flavor|
         # Base box definition, currently using.
-        #  Unofficial Fedora 31 (as currently there is no offical build).
         flavor.vm.box = "fedora/31-cloud-base"
         flavor.vm.box_version = "31.20191023.0"
         flavor.vm.box_check_update = false

@@ -32,10 +32,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     # Whether to check the correct additions version only. This will warn you
     # about version mis-matches, but will not try to install anything.
-    config.vbguest.no_install = false
+    config.vbguest.no_install = true
     # Set auto_update to false, if you do NOT want to check the correct
     # additions version when booting this machine.
-    config.vbguest.auto_update = true
+    config.vbguest.auto_update = false
     # Do NOT download the iso file from a webserver.
     config.vbguest.no_remote = true
     # Whether to reboot the box after GuestAdditions has been installed, but not
@@ -73,60 +73,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         ansible.playbook = "ansible/master.yml"
     end
 
-    config.vm.define "ubuntu_bionic_server", autostart: false do |flavor|
-        # Base box definition, currently using.
-        #  Official Ubuntu 18.04 LTS (Bionic Beaver) Daily Build.
-        flavor.vm.box = "ubuntu/bionic64"
-        flavor.vm.box_version = "20190724.1.0"
-        flavor.vm.box_check_update = false
-
-        # Virtualbox machine configuration.
-        flavor.vm.provider "virtualbox" do |vb|
-            vb.name = "vagrant_ubuntu_bionic"
-            vb.gui = false
-            vb.customize ["modifyvm", :id, "--nicpromisc2", "allow-all"]
-            vb.customize ["modifyvm", :id, "--nicpromisc3", "allow-all"]
-            vb.customize ["modifyvm", :id, "--nicpromisc4", "allow-all"]
-            vb.customize ["modifyvm", :id, "--nicpromisc5", "allow-all"]
-            vb.customize ["modifyvm", :id, "--ostype", "Linux_64"]
-            vb.customize ["modifyvm", :id, "--memory", 8196]
-            vb.customize ["modifyvm", :id, "--cpus", 4]
-            vb.customize ["modifyvm", :id, "--vram", 256]
-            vb.customize ["modifyvm", :id, "--ioapic", "on"]
-            vb.customize ["modifyvm", :id, "--rtcuseutc", "on"]
-            vb.customize ["modifyvm", :id, "--clipboard", "bidirectional"]
-            vb.customize ["modifyvm", :id, "--draganddrop", "bidirectional"]
-            vb.customize ["modifyvm", :id, "--usb", "on"]
-        end
-    end
-
-    config.vm.define "ubuntu_disco_desktop", autostart: false do |flavor|
-        # Base box definition, currently using.
-        #  Packer Ubuntu 19.10 VirtualBox image.
-        flavor.vm.box = "#{vagrant_box_path}/virtualbox/ubuntu-eoan-desktop-amd64-0.1.box"
-        #flavor.vm.box_version = "0.1"
-        flavor.vm.box_check_update = false
-
-        # Virtualbox machine configuration.
-        flavor.vm.provider "virtualbox" do |vb|
-            vb.name = "vagrant_ubuntu_disco_desktop"
-            vb.gui = true
-            vb.customize ["modifyvm", :id, "--nicpromisc2", "allow-all"]
-            vb.customize ["modifyvm", :id, "--nicpromisc3", "allow-all"]
-            vb.customize ["modifyvm", :id, "--nicpromisc4", "allow-all"]
-            vb.customize ["modifyvm", :id, "--nicpromisc5", "allow-all"]
-            vb.customize ["modifyvm", :id, "--ostype", "Linux_64"]
-            vb.customize ["modifyvm", :id, "--memory", 8196]
-            vb.customize ["modifyvm", :id, "--cpus", 4]
-            vb.customize ["modifyvm", :id, "--vram", 256]
-            vb.customize ["modifyvm", :id, "--ioapic", "on"]
-            vb.customize ["modifyvm", :id, "--rtcuseutc", "on"]
-            vb.customize ["modifyvm", :id, "--clipboard", "bidirectional"]
-            vb.customize ["modifyvm", :id, "--draganddrop", "bidirectional"]
-            vb.customize ["modifyvm", :id, "--usb", "on"]
-        end
-    end
-
     config.vm.define "ubuntu_focal_desktop" do |flavor|
         # Base box definition, currently using.
         #  Packer Ubuntu 20.04 VirtualBox image.
@@ -138,32 +84,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         flavor.vm.provider "virtualbox" do |vb|
             vb.name = "vagrant_ubuntu_focal_desktop"
             vb.gui = true
-            vb.customize ["modifyvm", :id, "--nicpromisc2", "allow-all"]
-            vb.customize ["modifyvm", :id, "--nicpromisc3", "allow-all"]
-            vb.customize ["modifyvm", :id, "--nicpromisc4", "allow-all"]
-            vb.customize ["modifyvm", :id, "--nicpromisc5", "allow-all"]
-            vb.customize ["modifyvm", :id, "--ostype", "Linux_64"]
-            vb.customize ["modifyvm", :id, "--memory", 8196]
-            vb.customize ["modifyvm", :id, "--cpus", 4]
-            vb.customize ["modifyvm", :id, "--vram", 256]
-            vb.customize ["modifyvm", :id, "--ioapic", "on"]
-            vb.customize ["modifyvm", :id, "--rtcuseutc", "on"]
-            vb.customize ["modifyvm", :id, "--clipboard", "bidirectional"]
-            vb.customize ["modifyvm", :id, "--draganddrop", "bidirectional"]
-            vb.customize ["modifyvm", :id, "--usb", "on"]
-        end
-    end
-
-    config.vm.define "fedora_31", autostart: false do |flavor|
-        # Base box definition, currently using.
-        flavor.vm.box = "fedora/31-cloud-base"
-        flavor.vm.box_version = "31.20191023.0"
-        flavor.vm.box_check_update = false
-
-        # Virtualbox machine configuration.
-        flavor.vm.provider "virtualbox" do |vb|
-            vb.name = "vagrant_fedora_31"
-            vb.gui = false
             vb.customize ["modifyvm", :id, "--nicpromisc2", "allow-all"]
             vb.customize ["modifyvm", :id, "--nicpromisc3", "allow-all"]
             vb.customize ["modifyvm", :id, "--nicpromisc4", "allow-all"]

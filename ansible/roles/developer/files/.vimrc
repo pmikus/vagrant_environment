@@ -1,13 +1,14 @@
+" General
 set nocompatible
 syntax enable
 set nowrap
 set encoding=utf8
 set termencoding=utf-8
+filetype off                  " required
+source $VIMRUNTIME/mswin.vim
+"behave mswine
 
 " Vundle plugin
-" Disable file type for vundle
-filetype off                  " required
-
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'                   " let Vundle manage Vundle, required
@@ -19,7 +20,6 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'airblade/vim-gitgutter'
 
 " Markdown / Writting
-Plugin 'reedes/vim-pencil'
 Plugin 'tpope/vim-markdown'
 Plugin 'jtratner/vim-flavored-markdown'
 
@@ -40,17 +40,12 @@ Plugin 'kien/ctrlp.vim'
 " Theme / Interface
 Plugin 'vim-airline/vim-airline'
 Plugin 'ryanoasis/vim-devicons'
-Plugin 'severin-lemaignan/vim-minimap'
-Plugin 'altercation/vim-colors-solarized'
+Plugin 'arcticicestudio/nord-vim'
 Plugin 'morhetz/gruvbox'
+
 call vundle#end()                               " required
 filetype plugin indent on                       " required
 
-"""""""""""""""""""""""""""""""""""""
-" Configuration Section
-"""""""""""""""""""""""""""""""""""""
-
-" Show linenumbers
 "set number
 set ruler
 if (exists('+colorcolumn'))
@@ -58,46 +53,27 @@ if (exists('+colorcolumn'))
     highlight ColorColumn ctermbg=9
 endif
 
-" Set Proper Tabs
 set tabstop=4
 set softtabstop=4
 set shiftwidth=4
 set smarttab
 set expandtab
-
 " Always display the status line
 set laststatus=2
-
-" Enable highlighting of the current line
 set cursorline
-" Highlight matching braces
 set showmatch
-
-" Theme and Styling
-set background=dark
-colorscheme gruvbox
-if &term == "screen"
-    set t_Co=256
-endif
-let base16colorspace=256  " Access colors present in 256 colorspace
-
 set syntax=sh
 "set autoindent
 set hlsearch
 set mouse=a
-
 set nowritebackup
 set nobackup
 set noswapfile
-
 set foldmethod=indent
 set foldlevel=10
 set foldlevelstart=20
 set foldnestmax=2
-
 set clipboard=unnamedplus
-
-let python_highlight_all=1
 
 " Key mapping
 map <F2> :NERDTreeToggle<CR>
@@ -105,16 +81,23 @@ map <F3> :Sexplore<CR>
 map <F8> :TagbarToggle<CR>
 map <C-c> "+y<CR>
 
-" NetRW
-let g:netrw_liststyle = 3
-let g:netrw_banner = 0
-let g:netrw_winsize = 25
-let g:netrw_browse_split = 4
-let g:netrw_altv = 1
-"augroup ProjectDrawer
-"  autocmd!
-"  autocmd VimEnter * :Vexplore
-"augroup END
+" Autocmd
+autocmd BufWritePre * %s/\s\+$//e
+
+" Theme options
+set guifont=UbuntuMono\ Nerd\ Font\ 11
+set stal=2                  "tab bar always on
+"set guioptions-=m          "remove menu bar
+set guioptions-=T           "remove toolbar
+set guioptions+=b
+"set guioptions-=r          "remove right-hand scroll bar
+"set guioptions-=L          "remove left-hand scroll bar
+"set lines=999 columns=999   "max size
+set background=dark
+colorscheme gruvbox
+if &term == "screen"
+    set t_Co=256
+endif
 
 " Indent guides plugin
 let g:indent_guides_start_level=4
@@ -141,6 +124,10 @@ if !exists('g:airline_symbols')
     let g:airline_symbols = {}
 endif
 let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#branch#enabled = 1
+let g:airline#extensions#branch#empty_message = ''
+let g:airline#extensions#branch#format = 1
+let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
 "let g:airline_symbols_ascii = 1
 let g:airline_detect_modified = 1
@@ -164,13 +151,3 @@ let g:airline_symbols.paste = '∥'
 let g:airline_symbols.spell = 'Ꞩ'
 let g:airline_symbols.notexists = '∄'
 let g:airline_symbols.whitespace = 'Ξ'
-
-" Solarized
-let g:solarized_termcolors= 256
-let g:solarized_termtrans = 1
-let g:solarized_degrade = 0
-let g:solarized_bold = 1
-let g:solarized_underline = 1
-let g:solarized_italic = 1
-let g:solarized_contrast = "high"
-let g:solarized_visibility= "high"
